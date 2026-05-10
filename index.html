@@ -27,6 +27,15 @@
   <meta name="revisit-after" content="7 days">
   <link rel="canonical" href="https://withmedia.in/">
 
+  <!-- ═══ FAVICON ═══ -->
+  <!-- Inline SVG favicon — no separate file needed, eliminates 404 on /favicon.ico -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23c9193f'/><text y='.9em' font-size='72' font-family='Arial Black,sans-serif' font-weight='900' fill='%23f2f0eb' x='50%25' text-anchor='middle'>W</text></svg>">
+  <link rel="shortcut icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23c9193f'/><text y='.9em' font-size='72' font-family='Arial Black,sans-serif' font-weight='900' fill='%23f2f0eb' x='50%25' text-anchor='middle'>W</text></svg>">
+  <link rel="apple-touch-icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%23c9193f'/><text y='.9em' font-size='72' font-family='Arial Black,sans-serif' font-weight='900' fill='%23f2f0eb' x='50%25' text-anchor='middle'>W</text></svg>">
+
   <!-- ═══ OPEN GRAPH (Facebook / LinkedIn / WhatsApp) ═══ -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://withmedia.in/">
@@ -1331,8 +1340,8 @@
 
     @media (max-width: 480px) {
       .reel-item {
-        width: 120px;
-        height: 120px;
+        width: 180px;
+        height: 160px;
         border-radius: 8px;
       }
 
@@ -4763,7 +4772,7 @@
       font-size: clamp(2.2rem, 4.5vw, 4.5rem);
       line-height: 1.18;
       letter-spacing: .02em;
-      max-width: 880px;
+      max-width: 1200px;
       margin-bottom: 3rem;
     }
 
@@ -4941,7 +4950,7 @@
 
     @media (max-width: 768px) {
       .founder-vis {
-        aspect-ratio: 16/9;
+        aspect-ratio: 9/11;
       }
     }
 
@@ -5450,7 +5459,7 @@
       }
 
       .nav-logo {
-        font-size: 0.95rem;
+        font-size: 1.5rem;
         letter-spacing: 0.04em;
       }
 
@@ -5805,7 +5814,7 @@
       }
 
       .nav-links button {
-        font-size: 0.65rem;
+        font-size: 2.5rem;
       }
 
       .hero {
@@ -5898,6 +5907,15 @@
 
       .cd-main {
         width: 75%;
+      }
+
+      .video-bg-container video {
+        width: 100vw !important;
+        height: 135vh !important;
+        object-fit: cover !important;
+        transform: translate(-50%, -50%) scale(1.02);
+        backface-visibility: hidden;
+        perspective: 1000px;
       }
     }
 
@@ -6527,35 +6545,44 @@
     ═══════════════════════════════════════ */
     #dot {
       position: fixed;
+      top: 0;
+      left: 0;
       width: 5px;
       height: 5px;
       border-radius: 50%;
       background: var(--red);
       pointer-events: none;
       z-index: 9000;
-      transform: translate(-50%, -50%);
+      /* translate(-50%,-50%) centres the dot on the pointer;
+         --cx/--cy are set synchronously in mousemove — no lag */
+      transform: translate(calc(var(--cx, 0px) - 50%), calc(var(--cy, 0px) - 50%));
       transition: width .2s var(--ease-out), height .2s var(--ease-out),
         background .15s, border-radius .2s, opacity .2s;
-      will-change: left, top;
+      will-change: transform;
       mix-blend-mode: normal;
     }
 
     #ring {
       position: fixed;
+      top: 0;
+      left: 0;
       width: 28px;
       height: 28px;
       border-radius: 50%;
       border: 1px solid rgba(214, 48, 39, .35);
       pointer-events: none;
       z-index: 8999;
-      transform: translate(-50%, -50%);
+      /* same CSS custom-property trick — moves in lockstep with #dot */
+      transform: translate(calc(var(--cx, 0px) - 50%), calc(var(--cy, 0px) - 50%));
       transition: width .5s var(--ease-out), height .5s var(--ease-out),
         opacity .3s, border-color .3s;
-      will-change: left, top;
+      will-change: transform;
     }
 
     #cursor-label {
       position: fixed;
+      top: 0;
+      left: 0;
       pointer-events: none;
       z-index: 9001;
       font-family: var(--fm);
@@ -6563,10 +6590,12 @@
       letter-spacing: .2em;
       color: var(--red);
       text-transform: uppercase;
-      transform: translate(16px, -50%);
+      /* 16 px offset to the right of the pointer, centred vertically */
+      transform: translate(calc(var(--cx, 0px) + 16px), calc(var(--cy, 0px) - 50%));
       opacity: 0;
       transition: opacity .25s;
       white-space: nowrap;
+      will-change: transform;
     }
 
     body.hover-state #dot {
@@ -7046,7 +7075,7 @@
       }
 
       .founder-main-img {
-        aspect-ratio: 3/2;
+        aspect-ratio: 9/11;
       }
     }
 
@@ -7310,7 +7339,7 @@
 
     @media (max-width: 480px) {
       .hero-title {
-        font-size: clamp(0.6rem, 4vw, 1.6rem) !important;
+        font-size: clamp(0.6rem, 4.5vw, 1.6rem) !important;
       }
 
       .hero-content-wrap {
@@ -7398,7 +7427,7 @@
       flex-wrap: wrap;
       justify-content: center;
       margin-top: 0.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 4rem;
     }
 
     /* Remove Services ghost button from hero */
@@ -9565,7 +9594,7 @@
           <div class="faq-wrap">
 
             <div class="faq-item sr">
-              <button class="faq-q" onclick="toggleFaq(this)" style="justify-content: space-between;">
+              <button class="faq-q" onclick="toggleFaq(this)">
                 Do you work with international clients?
                 <div class="faq-icon"></div>
               </button>
@@ -9581,7 +9610,7 @@
             </div>
 
             <div class="faq-item sr delay-1">
-              <button class="faq-q" onclick="toggleFaq(this)" style="justify-content: space-between;">
+              <button class="faq-q" onclick="toggleFaq(this)">
                 What does your editing process look like?
                 <div class="faq-icon"></div>
               </button>
@@ -9597,7 +9626,7 @@
             </div>
 
             <div class="faq-item sr delay-2">
-              <button class="faq-q" onclick="toggleFaq(this)" style="justify-content: space-between;">
+              <button class="faq-q" onclick="toggleFaq(this)">
                 Do you provide scripts or just editing?
                 <div class="faq-icon"></div>
               </button>
@@ -9612,7 +9641,7 @@
             </div>
 
             <div class="faq-item sr delay-1">
-              <button class="faq-q" onclick="toggleFaq(this)" style="justify-content: space-between;">
+              <button class="faq-q" onclick="toggleFaq(this)">
                 What niches do you work in?
                 <div class="faq-icon"></div>
               </button>
@@ -9628,7 +9657,7 @@
             </div>
 
             <div class="faq-item sr delay-2">
-              <button class="faq-q" onclick="toggleFaq(this)" style="justify-content: space-between;">
+              <button class="faq-q" onclick="toggleFaq(this)">
                 How do revisions work?
                 <div class="faq-icon"></div>
               </button>
@@ -9644,7 +9673,7 @@
             </div>
 
             <div class="faq-item sr delay-1">
-              <button class="faq-q" onclick="toggleFaq(this)" style="justify-content: space-between;">
+              <button class="faq-q" onclick="toggleFaq(this)">
                 What's your payment structure?
                 <div class="faq-icon"></div>
               </button>
@@ -9660,7 +9689,7 @@
             </div>
 
             <div class="faq-item sr delay-2">
-              <button class="faq-q" onclick="toggleFaq(this)" style="justify-content: space-between;">
+              <button class="faq-q" onclick="toggleFaq(this)">
                 Can I see examples before committing?
                 <div class="faq-icon"></div>
               </button>
@@ -10104,7 +10133,7 @@
     <section class="section">
       <div class="manifesto-text sr">We believe social media deserves <em>cinematic attention.</em> Every frame, every
         cut, every second of sound — it all matters.</div>
-      <p class="body-lg sr" style="max-width:580px;">WithMedia was founded in 2017 in Hyderabad with one stubborn
+      <p class="body-lg sr" style="max-width:1200px;">WithMedia was founded in 2017 in Hyderabad with one stubborn
         conviction: the gap between cinema and social media content shouldn't exist. The best creators deserve the same
         production quality and creative intent that goes into films — compressed into 30 seconds and built to stop a
         scroll.</p>
@@ -10164,7 +10193,7 @@
               camera.
             </p>
           </div>
-          <div class="tool-tags">
+          <!-- <div class="tool-tags">
             <span class="tool-tag">DaVinci Resolve</span>
             <span class="tool-tag">Sony FX30</span>
             <span class="tool-tag">S-Log3 / ACES</span>
@@ -10172,7 +10201,7 @@
             <span class="tool-tag">Notion</span>
             <span class="tool-tag">ClickUp</span>
             <span class="tool-tag">Google Drive</span>
-          </div>
+          </div> -->
         </div>
       </div>
     </section>
@@ -10903,6 +10932,10 @@
 
     // ═══════════════════════════════════════
     // CURSOR — desktop pointer devices only
+    // All three elements (dot · ring · label) move in perfect lockstep:
+    // a single CSS custom-property pair (--cx, --cy) is written once per
+    // mousemove and referenced by every cursor element's transform rule.
+    // No lerp, no RAF position loop → zero desynchronisation at any speed.
     // ═══════════════════════════════════════
     const dot = document.getElementById('dot');
     const ring = document.getElementById('ring');
@@ -10913,20 +10946,12 @@
 
     if (isPointerDevice && dot && ring) {
       document.body.style.cursor = 'none';
-      let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
       document.addEventListener('mousemove', e => {
-        mouseX = e.clientX; mouseY = e.clientY;
-        dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
-        if (cursorLabel) { cursorLabel.style.left = mouseX + 'px'; cursorLabel.style.top = mouseY + 'px'; }
-      });
-
-      (function animRing() {
-        ringX += (mouseX - ringX) * 0.1;
-        ringY += (mouseY - ringY) * 0.1;
-        ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
-        requestAnimationFrame(animRing);
-      })();
+        // Write position once — CSS reads it for dot, ring, and label simultaneously
+        document.documentElement.style.setProperty('--cx', e.clientX + 'px');
+        document.documentElement.style.setProperty('--cy', e.clientY + 'px');
+      }, { passive: true });
     }
 
     // ═══════════════════════════════════════
