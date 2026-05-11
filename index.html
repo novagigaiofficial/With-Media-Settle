@@ -254,7 +254,8 @@
       background-color: #0a0a0a;
       color: var(--white);
       font-family: var(--fs);
-      overflow-x: hidden;
+      /* F-07: overflow-x: hidden removed — it masked real layout bugs instead of fixing them.
+         If horizontal scroll reappears, find and fix the actual overflowing element. */
 
       /* Subtle fixed cinematic gradient - gives depth without fighting content */
       background: radial-gradient(ellipse at 50% 0%, #2a0b0b 0%, #0a0a0a 55%) fixed;
@@ -401,6 +402,13 @@
       li.mobile-nav-footer {
         display: none !important;
       }
+    }
+
+    /* F-12: Nav anchor wrappers — transparent to styling, provide real URLs for SEO & middle-click */
+    .nav-links li>a {
+      text-decoration: none;
+      color: inherit;
+      display: contents;
     }
 
     .nav-links button {
@@ -1251,16 +1259,29 @@
     /* ═══════════════════════════════════════
       SECTIONS
     ═══════════════════════════════════════ */
+    /* F-01: Cap all sections so content doesn't sprawl edge-to-edge on 2K/4K monitors */
     .section {
       padding: 3rem 4.5rem;
+      max-width: 2400px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
     }
 
     .section-s {
       padding: 9rem 2.5rem;
+      max-width: 1600px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
     }
 
     .section-sm {
       padding: 6rem 2.5rem;
+      max-width: 1600px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
     }
 
     .section-dark {
@@ -1479,11 +1500,13 @@
     /* ═══════════════════════════════════════
    ASVMMETRIC CINEMATIC NICHES
    ═══════════════════════════════════════ */
+    /* F-02: Use minmax so each niche cell never exceeds 240px on ultrawide */
     .niche-showcase {
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
+      grid-template-columns: repeat(12, minmax(0, 1fr));
       gap: 20px;
       padding: 1rem 0;
+      justify-content: center;
     }
 
     .niche-card {
@@ -6015,7 +6038,7 @@
       /* Cap content width so it doesn't stretch uncomfortably */
       .section,
       section {
-        padding: 7rem max(5rem, calc(50% - 900px)) !important;
+        padding: 7rem max(5rem, calc(50% - 2400px)) !important;
       }
 
       .hero {
@@ -6526,6 +6549,19 @@
     @media (max-width: 768px) {
       #grain {
         display: none;
+      }
+    }
+
+    /* F-10: Swap 'Drag to explore' → 'Swipe to explore' on touch/mobile */
+    @media (hover: none),
+    (max-width: 768px) {
+      .work-hint-text {
+        font-size: 0 !important;
+      }
+
+      .work-hint-text::before {
+        content: 'Swipe to explore';
+        font-size: 0.75rem;
       }
     }
 
@@ -8165,10 +8201,12 @@
 
   <!-- Mobile nav overlay — outside nav so it has its own stacking context above everything -->
   <ul class="nav-links" id="mobile-nav" role="list">
-    <li><button onclick="go('home')" class="active" data-page="home">Home</button></li>
-    <li><button onclick="go('services')" data-page="services">Services</button></li>
-    <li><button onclick="go('work')" data-page="work">Work</button></li>
-    <li><button onclick="go('about')" data-page="about">About</button></li>
+    <li><a href="#home" onclick="go('home');return false;"><button data-page="home" class="active">Home</button></a>
+    </li>
+    <li><a href="#services" onclick="go('services');return false;"><button data-page="services">Services</button></a>
+    </li>
+    <li><a href="#work" onclick="go('work');return false;"><button data-page="work">Work</button></a></li>
+    <li><a href="#about" onclick="go('about');return false;"><button data-page="about">About</button></a></li>
     <li class="mobile-nav-footer">
       <a href="mailto:manishkumar@withmedia.in">manishkumar@withmedia.in</a>
       <a href="https://www.instagram.com/editwmanish/" target="_blank" rel="noopener">@editwmanish</a>
@@ -8602,7 +8640,7 @@
       <section class="section" aria-label="Client Work">
         <div class="eyebrow sr">Selected Results</div>
         <div class="display display-lg sr" style="margin-bottom:1.5rem;">CLIENT <em>WORK</em></div>
-        <div class="work-hint sr"><span>Drag to explore</span>
+        <div class="work-hint sr"><span class="work-hint-text">Drag to explore</span>
           <div class="work-hint-line"></div>
         </div>
         <div class="work-outer" style="margin-top:1.5rem;">
@@ -9409,7 +9447,7 @@
         </div>
 
         <div class="testi-marquee-wrapper" id="testiWrapper">
-          <div class="testi-film-rail-top"></div>
+          <div class="testi-film-rail-top" aria-hidden="true"></div>
           <div class="marquee-track-tape" id="tapeTrack">
 
             <!-- SET 1 -->
@@ -9580,7 +9618,7 @@
             </div>
 
           </div>
-          <div class="testi-film-rail-bot"></div>
+          <div class="testi-film-rail-bot" aria-hidden="true"></div>
         </div>
       </section>
 
@@ -9594,7 +9632,7 @@
           <div class="faq-wrap">
 
             <div class="faq-item sr">
-              <button class="faq-q" onclick="toggleFaq(this)">
+              <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-answer" style="justify-content: space-between;">
                 Do you work with international clients?
                 <div class="faq-icon"></div>
               </button>
@@ -9610,7 +9648,7 @@
             </div>
 
             <div class="faq-item sr delay-1">
-              <button class="faq-q" onclick="toggleFaq(this)">
+              <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-answer" style="justify-content: space-between;">
                 What does your editing process look like?
                 <div class="faq-icon"></div>
               </button>
@@ -9626,7 +9664,7 @@
             </div>
 
             <div class="faq-item sr delay-2">
-              <button class="faq-q" onclick="toggleFaq(this)">
+              <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-answer" style="justify-content: space-between;">
                 Do you provide scripts or just editing?
                 <div class="faq-icon"></div>
               </button>
@@ -9641,7 +9679,7 @@
             </div>
 
             <div class="faq-item sr delay-1">
-              <button class="faq-q" onclick="toggleFaq(this)">
+              <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-answer" style="justify-content: space-between;">
                 What niches do you work in?
                 <div class="faq-icon"></div>
               </button>
@@ -9657,7 +9695,7 @@
             </div>
 
             <div class="faq-item sr delay-2">
-              <button class="faq-q" onclick="toggleFaq(this)">
+              <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-answer" style="justify-content: space-between;">
                 How do revisions work?
                 <div class="faq-icon"></div>
               </button>
@@ -9673,7 +9711,7 @@
             </div>
 
             <div class="faq-item sr delay-1">
-              <button class="faq-q" onclick="toggleFaq(this)">
+              <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-answer" style="justify-content: space-between;">
                 What's your payment structure?
                 <div class="faq-icon"></div>
               </button>
@@ -9689,7 +9727,7 @@
             </div>
 
             <div class="faq-item sr delay-2">
-              <button class="faq-q" onclick="toggleFaq(this)">
+              <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false" aria-controls="faq-answer" style="justify-content: space-between;">
                 Can I see examples before committing?
                 <div class="faq-icon"></div>
               </button>
@@ -10472,8 +10510,17 @@
       const item = button.parentElement;
       const isOpen = item.classList.contains('open');
 
-      document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
-      if (!isOpen) item.classList.add('open');
+      // Close all, reset aria states
+      document.querySelectorAll('.faq-item').forEach(el => {
+        el.classList.remove('open');
+        const btn = el.querySelector('.faq-q');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      });
+
+      if (!isOpen) {
+        item.classList.add('open');
+        button.setAttribute('aria-expanded', 'true');
+      }
     }
 
     // Panel Switcher (Internal Tab Logic)
@@ -10510,8 +10557,10 @@
       // Optional: Close mobile menu if it exists
       if (typeof closeMobileNavIfOpen === "function") closeMobileNavIfOpen();
 
-      // Push the new page to browser history so the back/forward buttons work
-      history.pushState({ page: pageId }, '', '#' + pageId);
+      // Hash-based routing — works on any static host (Vercel, Netlify, GitHub Pages)
+      // without needing server-side rewrite rules
+      const urlHash = pageId === 'home' ? '#home' : '#' + pageId;
+      history.pushState({ page: pageId }, '', urlHash);
       navHistory.push(pageId);
 
       _applyPage(pageId);
@@ -10591,8 +10640,10 @@
 
     // Seed the initial history state so the first back-press goes home
     (function seedHistory() {
-      // Replace the blank state with home so popstate fires correctly on first back
-      history.replaceState({ page: 'home' }, '', window.location.pathname + window.location.search);
+      // Use hash routing — compatible with static hosting without server rewrites
+      const hashMap = { '#services': 'services', '#work': 'work', '#about': 'about' };
+      const currentPage = hashMap[window.location.hash] || 'home';
+      history.replaceState({ page: currentPage }, '', window.location.hash || '#home');
     })();
 
     // ═══════════════════════════════════════
@@ -10635,6 +10686,22 @@
     // Initialize on first load
     document.addEventListener('DOMContentLoaded', () => {
       initCounters();
+
+      // Read hash on load so direct links like /#services activate the right page
+      const hashMap = { '#services': 'services', '#work': 'work', '#about': 'about' };
+      const startPage = hashMap[window.location.hash] || 'home';
+      if (startPage !== 'home') {
+        document.querySelectorAll('.page').forEach(p => {
+          p.classList.remove('active');
+          p.setAttribute('aria-hidden', 'true');
+        });
+        const target = document.getElementById('page-' + startPage);
+        if (target) { target.classList.add('active'); target.removeAttribute('aria-hidden'); }
+        document.querySelectorAll('.nav-links button').forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-page') === startPage);
+        });
+        activePage = startPage;
+      }
     });
 
     // ═══════════════════════════════════════
@@ -10942,12 +11009,20 @@
     const cursorLabel = document.getElementById('cursor-label');
 
     // Only activate custom cursor on true pointer (non-touch) desktop screens
+    // Also skip if user prefers reduced motion (F-09 / Performance)
     const isPointerDevice = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 1025px)').matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (isPointerDevice && dot && ring) {
+    if (isPointerDevice && !prefersReducedMotion && dot && ring) {
       document.body.style.cursor = 'none';
 
+      let cursorActive = !document.hidden;
+      document.addEventListener('visibilitychange', () => {
+        cursorActive = !document.hidden;
+      });
+
       document.addEventListener('mousemove', e => {
+        if (!cursorActive) return;
         // Write position once — CSS reads it for dot, ring, and label simultaneously
         document.documentElement.style.setProperty('--cx', e.clientX + 'px');
         document.documentElement.style.setProperty('--cy', e.clientY + 'px');
